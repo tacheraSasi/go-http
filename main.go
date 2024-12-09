@@ -2,26 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
-	"sync"
+	"time"
 )
-type User struct{
-	Name string `json:"name"`
+var PORT = ":8000"
+func main(){
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /",showInfo)
+	mux.HandleFunc("GET /sites",serveFile)
+	fmt.Println("Server is running smoothly at http://localhost:"+PORT)
+	err := http.ListenAndServe(PORT,mux)
+	if err != nil{
+		log.Fatal("Something went wrong while running the server",err)
+	}
 }
 
-var usersCache = make(map[int]User)
-var cacheMutex sync.RWMutex
+func showInfo(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintln(w,"Current Time:",time.Now())
+}
 
-func main(){
-	// mux := http.NewServeMux()
-
-	// mux.HandleFunc("/" ,handleRoot)
-	// mux.HandleFunc("POST /users" ,createUser)
-	// mux.HandleFunc("GET /users/{id}", getUser)
-	// mux.HandleFunc("DELETE /users/{id}", deleteUser)
-
-	//starting the server
-	fmt.Println("server is running on http://localhost:8000")
-	// http.ListenAndServe(":8000",mux)
-	http.ListenAndServe(":8000",http.FileServer(http.Dir("/var/www/html")))
+func serveFile(w http.ResponseWriter, r *http.Request){
+	http.ServeFile(w,r,"frontend/index.html")
 }
