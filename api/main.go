@@ -1,11 +1,18 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
+
+var print = fmt.Println
 
 func main(){
 	r := http.NewServeMux()
 	r.HandleFunc("/healthcheck", healthCheck)
+	r.HandleFunc("/api/register",SignUp)
 
+	print("Server is running on http://localhost")
 	err := http.ListenAndServe(":8080", r)
 	if err != nil {	
 		panic(err)
