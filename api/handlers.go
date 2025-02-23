@@ -17,7 +17,10 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type","Application/json")
 
 	var user User
-	json.NewDecoder(r.Body).Decode(user)
+	json.NewDecoder(r.Body).Decode(&user)
 	fmt.Println("User",user)
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message":"User created successfully"})
 
 }

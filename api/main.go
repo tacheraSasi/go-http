@@ -12,7 +12,8 @@ func main(){
 	r.HandleFunc("/healthcheck", healthCheck)
 	r.HandleFunc("/api/register",SignUp)
 
-	print("Server is running on http://localhost")
+	print("Server is running on http://localhost:8080")
+	
 	err := http.ListenAndServe(":8080", r)
 	if err != nil {	
 		panic(err)
